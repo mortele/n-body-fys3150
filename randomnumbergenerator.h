@@ -1,12 +1,12 @@
 #pragma once
 #include <random>
+#include <iostream>
 
 static std::mt19937_64 generator;
 
-
 class RandomNumberGenerator {
 public:
-    static void seed(unsigned long int seed=std::mt19937_64::default_seed) {
+    static void seed(uint64_t seed = std::mt19937_64::default_seed) {
         generator.seed(seed);
     }
 
