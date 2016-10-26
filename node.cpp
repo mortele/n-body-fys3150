@@ -1,4 +1,5 @@
 #include "node.h"
+#include <iomanip>
 
 using std::cout;
 using std::endl;
@@ -42,10 +43,17 @@ Node::Node(Vec position, double length) {
     m_length            = length;
     m_lengthHalf        = 0.5 * length;
     m_numberOfParticles = 0;
+    m_totalMass         = 0;
+    m_centerOfMassTimesMass = Vec();
+    m_centerOfMass      = Vec();
 }
 
 
 void Node::insertParticle(Particle* particle) {
+    m_centerOfMassTimesMass += particle->getPosition() * particle->getMass();
+    m_totalMass             += particle->getMass();
+    m_centerOfMass           = m_centerOfMassTimesMass / m_totalMass;
+
     if (m_numberOfParticles > 1) {
         Node* quad = computeSubQuadrant(particle);
         quad->insertParticle(particle);
@@ -68,17 +76,17 @@ void Node::insertParticle(Particle* particle) {
 
 Node* Node::computeSubQuadrant(Particle *Particle) {
     Vec& particlePosition = Particle->getPosition();
-    bool right = particlePosition[0] > m_position[0];
+    bool right = (particlePosition[0] > m_position[0]);
 
     if (right) {
         if (! m_rightInitialized) {
-            m_right = new Node(m_position + m_lengthHalf, m_lengthHalf);
+            m_right = new Node(m_position + 0.5*m_lengthHalf, m_lengthHalf);
             m_rightInitialized = true;
         }
         return m_right;
     } else {
         if (! m_leftInitialized) {
-            m_left = new Node(m_position - m_lengthHalf, m_lengthHalf);
+            m_left = new Node(m_position - 0.5*m_lengthHalf, m_lengthHalf);
             m_leftInitialized = true;
         }
         return m_left;
@@ -86,8 +94,9 @@ Node* Node::computeSubQuadrant(Particle *Particle) {
 }
 
 void Node::printTree(int level, bool right) {
+    cout << std::setw(2) << level << " ";
     for (int i=0; i<level; i++) {
-        cout << "\t";
+        cout << " .";
     }
     if (right) {
         cout << "R " << *this << endl;
@@ -107,7 +116,8 @@ std::ostream& operator<<(std::ostream& os, const Node& node) {
                                  << (node.m_leftInitialized == true) << ")";
     os << " ["  << node.m_position-node.m_lengthHalf    << ", "
                 << node.m_position+node.m_lengthHalf    << "] ";
-
+    os << " cm{" << node.m_centerOfMass << "}";
+    os << " M=" << node.m_totalMass;
     if (node.m_numberOfParticles == 1) {
         os << " Particle: " << node.m_particle->getPosition();
     }

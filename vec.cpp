@@ -15,6 +15,18 @@ Vec& Vec::operator+=(double value) {
     return *this;
 }
 
+Vec&Vec::operator*=(double value) {
+    m_x *= value;
+    m_y *= value;
+    return *this;
+}
+
+Vec&Vec::operator/=(double value) {
+    m_x /= value;
+    m_y /= value;
+    return *this;
+}
+
 Vec& Vec::operator+=(const Vec& other) {
     m_x += other.m_x;
     m_y += other.m_y;
@@ -31,6 +43,16 @@ Vec&Vec::operator-=(const Vec& other) {
     m_x -= other.m_x;
     m_y -= other.m_y;
     return *this;
+}
+
+Vec operator/(Vec left, const double right) {
+    left /= right;
+    return left;
+}
+
+Vec operator*(Vec left, const double right) {
+    left *= right;
+    return left;
 }
 
 Vec operator+(Vec left, const double right) {

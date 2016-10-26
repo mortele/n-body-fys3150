@@ -11,34 +11,23 @@ using std::vector;
 
 
 int main(int, char**) {
-    RandomNumberGenerator::seed(1294859823104995824);
+    RandomNumberGenerator::seed(12948598231049823);
 
-    int N = 3;
+    int N = 10000;
     vector<Particle*> particles;
     particles.resize(N);
 
-    Node parent(Vec(0.0, 0.0), 1.0);
+    Node parent(Vec(0.0), 2.0);
 
-    for (int i=0; i<1*N; i++) {
-        double r = RandomNumberGenerator::uniform(0,1);
-    }
 
-    cout << "[";
     for (int i=0; i<N; i++) {
-        Particle* p = new Particle();
-        particles.at(i) = p;
-        p->randomizePosition(-0.5, 0.5);
+        Particle* p = new Particle(1.0);
+        p->randomizePosition(-1.0,1.0);
         parent.insertParticle(p);
-        cout << p->getPosition();
-        if (i != N-1) {
-            cout << ";" << endl;
-        } else {
-            cout << "]" << endl;
-        }
     }
 
-
-    parent.printTree(0);
+    //parent.printTree(0);
+    cout << parent.getCenterOfMass() << endl;
 
     return 0;
 }

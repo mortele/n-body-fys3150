@@ -9,7 +9,10 @@ private:
     int         m_numberOfParticles;
     double      m_length;
     double      m_lengthHalf;
+    double      m_totalMass;
     Vec         m_position;
+    Vec         m_centerOfMass;
+    Vec         m_centerOfMassTimesMass;
     Particle*   m_particle;
 
     /*
@@ -35,4 +38,5 @@ public:
     Node*   computeSubQuadrant(Particle* Particle);
     void    printTree(int level, bool right=false);
     friend std::ostream& operator<<(std::ostream& os, const Node& node);
+    Vec     getCenterOfMass() { return m_centerOfMass; }
 };
